@@ -7,15 +7,12 @@
 
 	{% block body %}
         <br>
-        <h2>Encuestas creadas</h2>
+        <h1>Encuestas creadas</h1>
         <br>
 
         {% for poll in polls %}
             <h3>{{poll.title}}</h3>
-            <p>{{poll.option1}}</p>
-            <p>{{poll.option2}}</p>
-            <p>{{poll.option3}}</p>
-            <p>{{poll.option4}}</p>
+            <p>Creado el día: {{poll.creation_date}}</p>
         {% endfor %}
 
 	{% endblock %}

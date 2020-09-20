@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect
-from models import Polls, db
+from models import Polls, Options, Votes, db
 from datetime import date
 
 bp = Blueprint('blueprint', __name__, template_folder='../templates')
@@ -29,10 +29,13 @@ def create_poll():
 
 
 		new_poll = Polls(title=poll_title, tags=poll_tags, creation_date=date.today(),
-						expiration_date=None, option1=poll_opt1, option2=poll_opt2,
-						option3=poll_opt3, option4=poll_opt4)
+					expiration_date=None)
+		
+		new_options = Options(option1=poll_opt1, option2=poll_opt2, option3=poll_opt3,
+					option4=poll_opt4) 
 		
 		db.session.add(new_poll)
+		db.session.add(new_options)
 		db.session.commit()
 		return redirect('/')
 	
@@ -41,5 +44,39 @@ def create_poll():
 
 @bp.route('/polls', methods=['GET'])
 def list_polls():
-	all_polls = Polls.query.order_by(Polls.creation_date).all()
-	return render_template('encuestas.html', polls=all_polls)
+	all_polls = Polls.query.order_by(Polls.id).all()
+	all_options = Options.query.order_by(Options.id).all()
+	return render_template('encuestas.html', polls=all_polls, options=all_options)
+
+@bp.route('/vote/<id>', methods=['GET'])
+def vote(id):
+	poll = Polls.query.filter(Polls.id==id)[0]
+	options = Options.query.filter(Options.id==id)[0]
+
+	options_list = [options.option1, options.option2,options.option3, options.option4]
+	options_list = [i for i in options_list if i]
+	option_votes = []
+
+	for op in options_list:
+		op_votes = Votes.query.filter(Votes.poll_id == poll.id).filter(Votes.vote == op).count()
+		option_votes.append([op, op_votes])
+
+
+
+	return render_template('votacion.html', title=poll.title, options=options_list,
+							id=poll.id, votes=option_votes)
+
+@bp.route('/vote_processing', methods=['POST'])
+def vote_processing():
+	try:
+		vote = request.form['options']
+		poll_id = request.form['id']
+		new_vote = Votes(poll_id=poll_id, vote=vote)
+		db.session.add(new_vote)
+		db.session.commit()
+		return redirect(f'/vote/{poll_id}')
+	except:
+		return render_template('error.html', msg="Debes elegir una opción")
+
+
+

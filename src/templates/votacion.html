@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+	{% block head %}
+	<title>Encuesta {{id}}</title>
+	{% endblock %}
+
+	{% block body %}
+        <h3>{{title}}</h3>
+        
+        <form action="/vote_processing" method="POST">
+        <div class="form-group">
+            <div class="btn-group" id="vote" data-toggle="buttons">
+            
+            {% for option in options %}
+                <label class="btn btn-default blue">
+                    <input type="radio" class="toggle" name="options" value="{{option}}">{{option}}</input><br>
+                    <input type="hidden" name="id" value="{{id}}"/>
+                </label>
+            
+            {% endfor %}
+    	   </div>
+        <input class="btn btn-success" type='submit' value='Votar'>
+        </div>
+        </form>
+
+        <h3>Resultado</h3>
+        {% for vote in votes %}
+            <p>{{vote[0]}}: {{vote[1]}}</p>
+        {% endfor %}
+
+    {% endblock %}
