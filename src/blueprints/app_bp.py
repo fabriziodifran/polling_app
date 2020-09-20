@@ -68,15 +68,16 @@ def vote(id):
 
 @bp.route('/vote_processing', methods=['POST'])
 def vote_processing():
+	poll_id = request.form['id']
 	try:
 		vote = request.form['options']
-		poll_id = request.form['id']
 		new_vote = Votes(poll_id=poll_id, vote=vote)
 		db.session.add(new_vote)
 		db.session.commit()
-		return redirect(f'/vote/{poll_id}')
+		return render_template('mensaje.html', status='Voto guardado!', msg="Gracias por participar")
+	
 	except:
-		return render_template('error.html', msg="Debes elegir una opción")
+		return render_template('mensaje.html', status='Error', msg="Debes elegir una opción", id=poll_id)
 
 
 
