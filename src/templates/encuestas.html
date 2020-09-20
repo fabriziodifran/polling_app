@@ -7,12 +7,16 @@
 
 	{% block body %}
         <br>
-        <h1>Encuestas creadas</h1>
+        <h2>Encuestas creadas</h2>
         <br>
-
-        {% for poll in polls %}
-            <h3>{{poll.title}}</h3>
-            <p>Creado el día: {{poll.creation_date}}</p>
-        {% endfor %}
+            {% for poll in polls %}
+                <form action="/vote/{{poll.id}}" method="GET">
+                <div class="form-group">
+                    <h4>{{poll.title}}</h4>
+                    <p><small>Creado el día: {{poll.creation_date}}</small></p>
+                    <input class="btn btn-link" type='submit' value='Votar!'>
+                </div>
+                </form>
+            {% endfor %}
 
 	{% endblock %}
