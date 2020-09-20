@@ -1,0 +1,30 @@
+version: '3'
+
+volumes:
+    db:
+      driver: local
+
+services:
+    app:
+        container_name: polling-app
+        build:
+            context: .
+            dockerfile: docker/api/Dockerfile
+        depends_on:
+            - database
+        ports:
+            - "5000:5000"
+        volumes:
+            - ".:/source"
+
+    database:
+        container_name: database
+        build:
+            context: .
+            dockerfile: docker/database/Dockerfile
+        env_file:
+            - "docker/database/.env"
+        ports:
+            - "5433:5432"
+        volumes:
+            - db:/var/lib/postgresql/data/
