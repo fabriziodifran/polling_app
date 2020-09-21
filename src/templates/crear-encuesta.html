@@ -12,26 +12,30 @@
         <form action="/create_poll" method="POST">
         <div class="form-group">
             <label>Pregunta</label>
-            <input class="form-control" type='text' name='title' id='title' placeholder="Escriba una pregunta">
+            <input class="form-control" type='text' name='title' id='title' placeholder="Escriba una pregunta" required>
             <br>
             
             <div id="options">
                 <label>Opciones</label>
-                <input class="form-control" type='text' name='option' placeholder="Escribir opción" value="">
-                <input class="form-control" type='text' name='option' placeholder="Escribir opción" value="">
+                <input class="form-control" type='text' name='option' placeholder="Escribir opción" value="" required>
+                <input class="form-control" type='text' name='option' placeholder="Escribir opción" value="" required>
             </div>
             <small id="passwordHelpBlock" class="form-text text-muted">
-                Deben haber como mínimo dos opciones y como máximo cuatro.
+                Deben haber como mínimo dos opciones y como máximo cuatro
             </small>
-            <br>
             <input class="btn btn-link" onclick="addElement()" value='Agregar opción'>
             <input class="btn btn-link" onclick="delElement()" value='Eliminar opción'>
-            <br>
+            <br><br>
+            <label>Horas de votación</label>
+            <input class="form-control" type='text' name='expiration_time' id='tags' placeholder="Horas de votación" required>
+            <small class="form-text text-muted">
+                Cero indica que no hay tiempo de expiración 
+            </small>
             <br>
             <label>Etiquetas</label>
             <input class="form-control" type='text' name='tags' id='tags' placeholder="Ej: musica, futbol, internet">
             <small class="form-text text-muted">
-                Las etiquetas deben estar separadas por comas.
+                Las etiquetas deben estar separadas por comas
             </small>
             <br>
             <script>

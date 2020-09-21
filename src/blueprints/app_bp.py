@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect
 from models import Polls, Options, Votes, db
-from datetime import datetime
+from datetime import datetime, timedelta
 
 bp = Blueprint('blueprint', __name__, template_folder='../templates')
 
@@ -14,6 +14,16 @@ def create_poll():
 		poll_title = request.form.get('title')
 		poll_options = request.form.getlist('option')
 		poll_tags = request.form.get('tags')
+		creation_date = datetime.now()
+		expiration_time = int(request.form.get('expiration_time'))
+		
+		if expiration_time>0:
+			time_delta = timedelta(hours=expiration_time)
+			expiration_date = creation_date + time_delta
+			expiration_date = expiration_date.strftime("%Y-%m-%d %H:%M:%S")
+		else:
+			expiration_date = None
+
 
 		if len(poll_options)==4:
 			poll_opt1, poll_opt2, poll_opt3, poll_opt4 = poll_options
@@ -29,8 +39,8 @@ def create_poll():
 
 
 		new_poll = Polls(title=poll_title, tags=poll_tags,
-						creation_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-						expiration_date=None)
+						creation_date=creation_date.strftime("%Y-%m-%d %H:%M:%S"),
+						expiration_date=expiration_date)
 		
 		new_options = Options(option1=poll_opt1,
 							option2=poll_opt2,
