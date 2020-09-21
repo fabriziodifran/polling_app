@@ -12,6 +12,7 @@ services:
             dockerfile: docker/api/Dockerfile
         depends_on:
             - database
+        command: bash -c "sleep 5 && python src/app.py"
         ports:
             - "5000:5000"
         volumes:
