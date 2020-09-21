@@ -37,16 +37,28 @@ def create_poll():
 		db.session.add(new_poll)
 		db.session.add(new_options)
 		db.session.commit()
-		return redirect('/')
+		return render_template('mensaje.html', status='Encuesta creada con éxito', msg='Podés crear otras encuestas o votar')
 	
 	else:
 		return render_template('crear-encuesta.html')
 
-@bp.route('/polls', methods=['GET'])
+@bp.route('/polls', methods=['GET', 'POST'])
 def list_polls():
-	all_polls = Polls.query.order_by(Polls.id).all()
-	all_options = Options.query.order_by(Options.id).all()
-	return render_template('encuestas.html', polls=all_polls, options=all_options)
+	tags = request.form.get('tags')
+	if tags:
+		tag_list = [x.strip() for x in tags.split(',')]
+		all_polls = []
+		
+		for tag in tag_list:
+			all_polls+=Polls.query.filter(Polls.tags.contains(tag)).all()
+
+		all_polls = list(set(all_polls))
+		
+		return render_template('encuestas.html', polls=all_polls)
+
+	else:
+		all_polls = Polls.query.order_by(Polls.id).all()
+		return render_template('encuestas.html', polls=all_polls)
 
 @bp.route('/vote/<id>', methods=['GET'])
 def vote(id):

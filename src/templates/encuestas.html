@@ -7,16 +7,33 @@
 
 	{% block body %}
         <br>
-        <h2>Encuestas creadas</h2>
+        <form class="form-inline" action="/polls" method="POST">
+            <input  class="form-control mr-sm-2" type="text" name="tags" value="" placeholder="Tags">
+            <button class="btn btn-outline-primary btn-lg" type="submit">Buscar por tags</button>
+        </form>
         <br>
-            {% for poll in polls %}
-                <form action="/vote/{{poll.id}}" method="GET">
-                <div class="form-group">
-                    <h4>{{poll.title}}</h4>
-                    <p><small>Creado el día: {{poll.creation_date}}</small></p>
-                    <input class="btn btn-link" type='submit' value='Votar!'>
-                </div>
-                </form>
-            {% endfor %}
-
-	{% endblock %}
+        {% if polls %}
+            <h3>Encuestas</h3>
+            <br>
+                {% for poll in polls %}
+                    <form action="/vote/{{poll.id}}" method="GET">
+                    <div class="form-group">
+                        <h4>{{poll.title}}</h4>
+                        <p>Tags: {{poll.tags}}</p>
+                        <p><small>Creado el día: {{poll.creation_date}}</small></p>
+                        <input class="btn btn-link" type='submit' value='Votar!'>
+                    </div>
+                    </form>
+                    <hr>
+                {% endfor %}
+        {% else %}
+            <div class="jumbotron">
+                <h1 class="display-4">No hay encuestas</h1>
+                <p class="lead">
+                    <a class="btn btn-primary btn-lg" href="/create_poll" role="button">Crear encuesta</a>
+                    <a class="btn btn-primary btn-lg" href="/" role="button">Página principal</a>
+                </p>
+            </div>        
+        {% endif %}
+	
+    {% endblock %}
