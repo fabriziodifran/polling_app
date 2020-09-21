@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect
 from models import Polls, Options, Votes, db
-from datetime import date
+from datetime import datetime
 
 bp = Blueprint('blueprint', __name__, template_folder='../templates')
 
@@ -28,11 +28,14 @@ def create_poll():
 			poll_opt4 = None
 
 
-		new_poll = Polls(title=poll_title, tags=poll_tags, creation_date=date.today(),
-					expiration_date=None)
+		new_poll = Polls(title=poll_title, tags=poll_tags,
+						creation_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+						expiration_date=None)
 		
-		new_options = Options(option1=poll_opt1, option2=poll_opt2, option3=poll_opt3,
-					option4=poll_opt4) 
+		new_options = Options(option1=poll_opt1,
+							option2=poll_opt2,
+							option3=poll_opt3,
+							option4=poll_opt4) 
 		
 		db.session.add(new_poll)
 		db.session.add(new_options)
@@ -57,7 +60,7 @@ def list_polls():
 		return render_template('encuestas.html', polls=all_polls)
 
 	else:
-		all_polls = Polls.query.order_by(Polls.id).all()
+		all_polls = Polls.query.order_by(Polls.id.desc()).all()
 		return render_template('encuestas.html', polls=all_polls)
 
 @bp.route('/vote/<id>', methods=['GET'])
