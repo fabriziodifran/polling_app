@@ -2,7 +2,7 @@
 Autor: Fabrizio Di Francesco
 
 # Comentarios
-La mayor dificultad que encontré realizando este proyecto fue la dockerización del mismo. A pesar de haber utilizado docker en otros proyectos, tuve dificultades con el seteo de las variables de entorno y en coordinar el orden de arranque de los contenedores.
+El mayor desafío que encontré realizando este proyecto fue la dockerización del mismo. A pesar de haber utilizado docker en otros proyectos, tuve dificultades con el seteo de las variables de entorno y en coordinar el orden de arranque de los conte:wqnedores.
 Por cuestiones de tiempo no pude implementar la gestión de usuarios y la expiración de encuestas.
 
 # Instalacion y ejecución
